@@ -9,7 +9,8 @@ const cors = require("cors");
 const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
-const FREQUENCY = 1000
+const MAX = 100;
+const FREQUENCY = 1000;
 
 let cntr = 0
 var assetsCollection = new AssetsCollection();
