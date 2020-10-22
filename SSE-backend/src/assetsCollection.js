@@ -1,8 +1,9 @@
 const Asset = require('./asset.js')
-const currencyCodes = ['AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR']
-const MAX = 100;
-const NUM_ASSETS = 20
+const currencyCodes = ['AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR','AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR']
+const NUM_ASSETS = 180
 
+
+// Class to hold a collection of assets. 
 class AssetsCollection {
     constructor() {
         this.assetsList = []

@@ -1,3 +1,5 @@
+
+// Single asset 
 class Asset {
     constructor(id, assetName, price, lastUpdate, type) {
         this.id = id

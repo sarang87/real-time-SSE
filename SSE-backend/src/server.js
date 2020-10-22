@@ -1,16 +1,21 @@
+// Main file for SSE. This server emits events at one every  second.
+
+
+
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
-
+const FREQUENCY = 1000
 
 let cntr = 0
 var assetsCollection = new AssetsCollection();
 assetsCollection.createAssets();
-//assetsCollection.viewAssets();
 
+// Api to create and get all assets 
 app.get("/assets", (req, res) =>{
     res.set({
         "Content-Type": "text/event-stream",
@@ -28,6 +33,7 @@ app.get("/assets", (req, res) =>{
 
 })
 
+// Streaming SSE for sending an update every second for an asset
 app.get("/stream", (req, res) => {
     res.set({
         "Content-Type": "text/event-stream",
@@ -43,13 +49,13 @@ app.get("/stream", (req, res) => {
     let eventInterval = setInterval(() => {
         res.write(`event: message\n`);
         //console.log(JSON.stringify(assetsCollection.updateAssets()))
-        console.log('\n\n*********')
+        console.log('\n\nData sent')
         //console.log(assets[0])
         res.write(`data: ${JSON.stringify(assetsCollection.updateAssets())}\n\n`);
 
         //res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
         cntr = (cntr +1) % 20
-    }, 4000);
+    }, FREQUENCY);
 
     req.on("close", (err) => {
         clearInterval(eventInterval);
