@@ -1,7 +1,7 @@
 const Asset = require('./asset.js')
-const currencyCodes = ['AED', 'AFN', 'INR', 'CAD', 'USD']
+const currencyCodes = ['AED', 'AFN', 'INR', 'NHD', 'NGR','CAD', 'USD','SFD','HJF', 'RFG', 'GSD', 'SFG', 'FBV', 'QWS', 'YFD', 'WSF','ETH', 'ETY','CDA', 'BNR']
 const MAX = 100;
-const NUM_ASSETS = 5
+const NUM_ASSETS = 20
 
 class AssetsCollection {
     constructor() {
@@ -32,11 +32,31 @@ class AssetsCollection {
         return resultJSON
     }
 
+    updateAsset(idx) { 
+        var result= []              
+        const newTS = getTimeStamp()
+        const newRate = getNewRate(this.assetsList[idx].price)           
+        this.assetsList[idx].updateAsset(newRate,newTS)
+        result.push(this.assetsList[idx].toJSON())
+        //return this.assetsList
+        return result
+    }
+
     viewAssets() {
         console.log("**** Current assets prices ****")
         for (var i = 0; i < NUM_ASSETS; i++) {
             this.assetsList[i].viewAsset()
+        }    
+    }
+
+    getAssets() {
+        console.log("**** Get Assets ****")
+        var result= []       
+        for (var i = 0; i < NUM_ASSETS; i++) {
+            result.push(this.assetsList[i].toJSON())
         }
+        //return this.assetsList
+        return result
 
     }
 }

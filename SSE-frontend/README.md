@@ -1,3 +1,11 @@
+To run the project 
+
+yarn install
+
+yarn start
+
+This will open a React client in your browser.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

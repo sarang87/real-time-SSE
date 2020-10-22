@@ -5,9 +5,28 @@ const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
 
+
+let cntr = 0
 var assetsCollection = new AssetsCollection();
 assetsCollection.createAssets();
-assetsCollection.viewAssets();
+//assetsCollection.viewAssets();
+
+app.get("/assets", (req, res) =>{
+    res.set({
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+
+        // enabling CORS
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers":
+            "Origin, X-Requested-With, Content-Type, Accept",
+    });
+    assets = JSON.stringify(assetsCollection.getAssets());
+   
+    res.json(assets)
+
+})
 
 app.get("/stream", (req, res) => {
     res.set({
@@ -23,9 +42,14 @@ app.get("/stream", (req, res) => {
 
     let eventInterval = setInterval(() => {
         res.write(`event: message\n`);
-        console.log(JSON.stringify(assetsCollection.updateAssets()))
+        //console.log(JSON.stringify(assetsCollection.updateAssets()))
+        console.log('\n\n*********')
+        //console.log(assets[0])
         res.write(`data: ${JSON.stringify(assetsCollection.updateAssets())}\n\n`);
-    }, 2000);
+
+        //res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
+        cntr = (cntr +1) % 20
+    }, 4000);
 
     req.on("close", (err) => {
         clearInterval(eventInterval);
