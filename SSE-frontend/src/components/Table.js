@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from 'axios';
 
 
 
@@ -9,12 +9,32 @@ function Table(props) {
 
   React.useEffect(() => {
     let eventSource = new EventSource("http://localhost:8000/stream");
-    console.log(eventSource)
+    
     eventSource.onmessage = e => updateProdutList(JSON.parse(e.data));
 
-  }, []);
+  },[]);
+
+
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const result = await axios(
+        'http://localhost:8000/assets',
+      );
+      const product = JSON.parse(result.data)
+      console.log(product[0])
+      setData([...product]);
+    }
+    fetchData()
+  }, []
+  )
+
+
+
 
   const updateProdutList = (product) => {
+    console.log("New data received")
+    console.log(product)
     setData([...product])
 
   }
@@ -24,16 +44,16 @@ function Table(props) {
 
     <div className="contact">
 
-    
+
       {
-        data.map((asset,idx) => (
-          <div>
-            <span key={idx} >{asset.price}</span>
+        data.map((asset, idx) => (
+          <div key={idx}>
+            <span  >{asset.price}</span>
           </div>
         ))
       }
 
-     
+
     </div>
 
 
