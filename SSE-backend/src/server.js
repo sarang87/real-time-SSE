@@ -10,7 +10,7 @@ const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
 
-const FREQUENCY = 8000;
+const FREQUENCY = 4000;
 
 let cntr = 0
 var assetsCollection = new AssetsCollection();

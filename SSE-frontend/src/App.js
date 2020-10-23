@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import Contact from "./components/Contact";
-import Table from "./components/Table";
+//import Contact from "./components/Contact";
+//import Table from "./components/Table";
 import TableContainer from "./components/TableContainer"
 import axios from 'axios';
+import { Container } from "reactstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
 
   // Get all assets when the page loads
   React.useEffect(() => {
+
     async function fetchData() {
       const result = await axios(
         'http://localhost:8000/assets',
@@ -58,16 +61,23 @@ function App() {
   }, []);
 
   const updateProductList = (product) => {
-    
+
     console.log(product)
-    //setData(prevData => [...prevData.filter(d => d.id == product.id), product])
+    // setState((prevState) => ({
+    //   ...prevState,
+    //   appointmentTypes: {
+    //     ...prevState.appointmentTypes,
+    //     loading: false
+    //   }
+    // }));
+    //setData((prevData) => ({...prevData.filter(d => d.id == product.id)}))
+    //setData(product)
   }
 
   return (
-    <div className="App">
-      <h1>RxJS with React</h1>
+    <Container style={{ marginTop: 100 }}>
       <TableContainer columns={columns} data={data} />
-    </div>
+    </Container>
 
   );
 }
