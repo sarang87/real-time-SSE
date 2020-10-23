@@ -8,10 +8,12 @@
     "@testing-library/user-event": "^7.1.2",
     "add": "^2.0.6",
     "axios": "^0.20.0",
+    "bootstrap": "^4.5.3",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-scripts": "3.4.3",
     "react-table": "^7.6.0",
+    "reactstrap": "^8.6.0",
     "rxjs": "^6.6.3",
     "rxjs-hooks": "^0.6.2",
     "yarn": "^1.22.10"

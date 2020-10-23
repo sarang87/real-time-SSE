@@ -1,8 +1,8 @@
 import React from "react";
 import axios from 'axios';
 function Table(props) {
-
-  const [data, setData] = React.useState([]);
+  
+    const [data, setData] = React.useState([]);
   
   // listen for events from the server
   React.useEffect(() => {

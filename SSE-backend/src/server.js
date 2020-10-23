@@ -9,8 +9,8 @@ const cors = require("cors");
 const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
-const MAX = 100;
-const FREQUENCY = 1000;
+
+const FREQUENCY = 8000;
 
 let cntr = 0
 var assetsCollection = new AssetsCollection();
@@ -52,9 +52,9 @@ app.get("/stream", (req, res) => {
         //console.log(JSON.stringify(assetsCollection.updateAssets()))
         console.log('\n\nData sent')
         //console.log(assets[0])
-        res.write(`data: ${JSON.stringify(assetsCollection.updateAssets())}\n\n`);
+        //res.write(`data: ${JSON.stringify(assetsCollection.updateAssets())}\n\n`);
 
-        //res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
+        res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
         cntr = (cntr +1) % 20
     }, FREQUENCY);
 
