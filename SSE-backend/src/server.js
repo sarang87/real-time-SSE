@@ -9,7 +9,6 @@ const cors = require("cors");
 const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
-
 const FREQUENCY = 1000;
 
 let cntr = 0
@@ -36,6 +35,8 @@ app.get("/assets", (req, res) =>{
 
 // Streaming SSE for sending an update every second for an asset
 app.get("/stream", (req, res) => {
+    console.log(req.headers)
+    console.log("***************\n\n")
     res.set({
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -49,10 +50,14 @@ app.get("/stream", (req, res) => {
 
     let eventInterval = setInterval(() => {
         res.write(`event: message\n`);
-        console.log('\n\nData sent')
+        console.log(cntr)
         //res.write(`data: ${JSON.stringify(assetsCollection.updateAssets())}\n\n`);
         res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
-        cntr = (cntr +1) % 20
+        cntr++ 
+        if (cntr==179){
+            cntr=0
+        }
+        console.log(new Date().getTime() + "\n")
     }, FREQUENCY);
 
     req.on("close", (err) => {

@@ -58,10 +58,11 @@ function App() {
       const events = new EventSource('http://localhost:8000/stream');
       events.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
+        console.log(parsedData[0])
         //setData((data) => data.map(d=> {if (d.id === ) {console.log(d); console.log(parsedData[0])}; return d}));
-        //setData((data)=> data.map( function(item) { return item.id === parsedData[0].id ? parsedData : item; }))
+        setData((data)=> data.map( function(item) { if (item.id === parsedData[0].id) { return parsedData[0]} else {return item} }))
         //setData((data)=> data.map( function(item) { console.log(parsedData[0]); return item }))
-        setData((data)=>data.concat(parsedData[0]))
+        //setData((data)=>data.concat(parsedData[0]))
       };
 
       setListening(true);
