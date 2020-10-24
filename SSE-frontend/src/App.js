@@ -1,7 +1,5 @@
 import React from 'react';
 import './App.css';
-//import Contact from "./components/Contact";
-//import Table from "./components/Table";
 import TableContainer from "./components/TableContainer"
 import axios from 'axios';
 import { Container } from "reactstrap"
@@ -37,6 +35,8 @@ function App() {
   )
 
   const [data, setData] = React.useState([]);
+  const [listening, setListening] = React.useState(false);
+
 
   // Get all assets when the page loads
   React.useEffect(() => {
@@ -50,29 +50,40 @@ function App() {
       setData(assets);
     }
     fetchData()
-  }, []
-  )
+    setListening(true)
+  }, [])
 
   React.useEffect(() => {
-    let eventSource = new EventSource("http://localhost:8000/stream");
+    if (!listening) {
+      const events = new EventSource('http://localhost:8000/stream');
+      events.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data);
+        //setData((data) => data.map(d=> {if (d.id === ) {console.log(d); console.log(parsedData[0])}; return d}));
+        //setData((data)=> data.map( function(item) { return item.id === parsedData[0].id ? parsedData : item; }))
+        //setData((data)=> data.map( function(item) { console.log(parsedData[0]); return item }))
+        setData((data)=>data.concat(parsedData[0]))
+      };
 
-    eventSource.onmessage = e => updateProductList(JSON.parse(e.data));
+      setListening(true);
+    }
+  }, [listening, data]);
 
-  }, []);
 
-  const updateProductList = (product) => {
+  // React.useEffect(() => {
+  // if (listening) {
+  //   let eventSource = new EventSource("http://localhost:8000/stream");
+  //   eventSource.onmessage = (e) => updateProductList(JSON.parse(e.data), data)
+  // }
 
-    console.log(product)
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   appointmentTypes: {
-    //     ...prevState.appointmentTypes,
-    //     loading: false
-    //   }
-    // }));
-    //setData((prevData) => ({...prevData.filter(d => d.id == product.id)}))
-    //setData(product)
-  }
+
+  // }, []);
+
+  // const updateProductList = (product, prevData) => {
+  //   console.log("*******************")
+  //   console.log(product)
+  //   console.log(prevData)
+
+  // }
 
   return (
     <Container style={{ marginTop: 100 }}>
