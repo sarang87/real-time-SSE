@@ -1,8 +1,4 @@
 // Main file for SSE. This server emits events at one every  second.
-
-
-
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -10,7 +6,6 @@ const AssetsCollection = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
 const FREQUENCY = 1000;
-
 let cntr = 0
 var assetsCollection = new AssetsCollection();
 assetsCollection.createAssets();
@@ -21,16 +16,13 @@ app.get("/assets", (req, res) =>{
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
-
         // enabling CORS
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers":
             "Origin, X-Requested-With, Content-Type, Accept",
     });
-    assets = JSON.stringify(assetsCollection.getAssets());
-   
+    assets = JSON.stringify(assetsCollection.getAssets());  
     res.json(assets)
-
 })
 
 // Streaming SSE for sending an update every second for an asset
@@ -41,7 +33,6 @@ app.get("/stream", (req, res) => {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
-
         // enabling CORS
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers":

@@ -59,10 +59,10 @@ function App() {
       events.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
         console.log(parsedData[0])
-        //setData((data) => data.map(d=> {if (d.id === ) {console.log(d); console.log(parsedData[0])}; return d}));
         setData((data)=> data.map( function(item) { if (item.id === parsedData[0].id) { return parsedData[0]} else {return item} }))
-        //setData((data)=> data.map( function(item) { console.log(parsedData[0]); return item }))
-        //setData((data)=>data.concat(parsedData[0]))
+        //setData((data)=> [...data.filter( (item) =>  item.id != parsedData[0].id), parsedData[0]])
+
+       
       };
 
       setListening(true);
@@ -70,21 +70,6 @@ function App() {
   }, [listening, data]);
 
 
-  // React.useEffect(() => {
-  // if (listening) {
-  //   let eventSource = new EventSource("http://localhost:8000/stream");
-  //   eventSource.onmessage = (e) => updateProductList(JSON.parse(e.data), data)
-  // }
-
-
-  // }, []);
-
-  // const updateProductList = (product, prevData) => {
-  //   console.log("*******************")
-  //   console.log(product)
-  //   console.log(prevData)
-
-  // }
 
   return (
     <Container style={{ marginTop: 100 }}>
