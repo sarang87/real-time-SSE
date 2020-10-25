@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
   useTable,
   useSortBy,
@@ -10,6 +10,9 @@ import { Table, Row, Col, Button, Input, CustomInput } from 'reactstrap';
 import { Filter, DefaultColumnFilter } from './filters';
 
 const TableContainer = ({ columns, data, renderRowSubComponent }) => {
+
+  const [sortedColumn, setSortedColumn] = useState({ });
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -39,6 +42,15 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
     usePagination
   );
 
+  const columnToBeSorted = useRef(null);
+  useEffect(() => {
+    if(columnToBeSorted.current) {
+      if(sortedColumn.isSorted) {
+        sortedColumn.toggleSortBy(!!sortedColumn.isSortedDesc);
+      }
+    }
+  }, [data])
+
   const generateSortingIndicator = (column) => {
     return column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : '';
   };
@@ -53,14 +65,16 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <Table bordered hover {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>
-                  <div {...column.getSortByToggleProps()}>
+                <th onClick={() => { setSortedColumn(column) }} {...column.getHeaderProps()}>
+                  <div 
+                  ref={column.Header === sortedColumn.Header ? columnToBeSorted : null} 
+                  {...column.getSortByToggleProps()}>
                     {column.render('Header')}
                     {generateSortingIndicator(column)}
                   </div>
@@ -134,8 +148,9 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
             type='select'
             value={pageSize}
             onChange={onChangeInSelect}
+            id='custom-input-id'
           >
-            
+
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
@@ -156,7 +171,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
           </Button>
         </Col>
       </Row>
-    </Fragment>
+    </>
   );
 };
 
