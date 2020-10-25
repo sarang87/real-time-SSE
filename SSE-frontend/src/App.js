@@ -32,9 +32,7 @@ const App = () => {
         Header: "Asset Type",
         accessor: "type",
       },
-    ],
-    []
-  )
+    ], []);
 
   const [data, setData] = useState([]);
   const [eventSource] = useState(new EventSource("http://localhost:8000/stream"));
