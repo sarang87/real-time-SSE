@@ -1,8 +1,4 @@
 // Main file for SSE. This server emits events at one every  second.
-
-
-
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -22,25 +18,23 @@ app.get("/assets", (req, res) =>{
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
-
         // enabling CORS
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers":
             "Origin, X-Requested-With, Content-Type, Accept",
     });
-    assets = JSON.stringify(assetsCollection.getAssets());
-   
+    assets = JSON.stringify(assetsCollection.getAssets());  
     res.json(assets)
-
 })
 
 // Streaming SSE for sending an update every second for an asset
 app.get("/stream", (req, res) => {
+    console.log(req.headers)
+    console.log("***************\n\n")
     res.set({
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
-
         // enabling CORS
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers":
@@ -50,7 +44,11 @@ app.get("/stream", (req, res) => {
     let eventInterval = setInterval(() => {
         res.write(`event: message\n`);
         res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
-        cntr = (cntr +1) % 20
+        cntr++ 
+        if (cntr==179){
+            cntr=0
+        }
+        console.log(new Date().getTime() + "\n")
     }, FREQUENCY);
 
     req.on("close", (err) => {
