@@ -29,12 +29,14 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+    
   } = useTable(
     {
       columns,
       data,
       defaultColumn: { Filter: DefaultColumnFilter },
       initialState: { pageIndex: 0, pageSize: 10 },
+      autoResetPage: false
     },
     useFilters,
     useSortBy,

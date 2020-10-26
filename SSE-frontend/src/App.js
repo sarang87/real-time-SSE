@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './App.css';
-//import Contact from "./components/Contact";
-//import Table from "./components/Table";
 import TableContainer from "./components/TableContainer"
+//import List from "./components/List"
 import axios from 'axios';
 import { Container } from "reactstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
+//import { SelectColumnFilter } from './components/filters';
 
-
-const App = () => {
+function App() {
 
   const columns = React.useMemo(
     () => [
@@ -32,40 +31,44 @@ const App = () => {
         Header: "Asset Type",
         accessor: "type",
       },
-    ], []);
+    ],
+    []
+  )
 
-  const [data, setData] = useState([]);
-  const [eventSource] = useState(new EventSource("http://localhost:8000/stream"));
-
-  const updateProductList = (product) => {
-    const newData = product[0];
-    const prevData = [...data];
-    const index = prevData.findIndex(x => x.id === newData.id);
-    prevData[index] = newData;
-    setData(prevData);
-  }
-
-  useEffect(() => {
-    eventSource.removeEventListener('message', () => { });
-    eventSource.onmessage = e => updateProductList(JSON.parse(e.data));
-  }, [data])
+  const [data, setData] = React.useState([]);
+  const [listening, setListening] = React.useState(false);
 
   // Get all assets when the page loads
-  useEffect(() => {
+  React.useEffect(() => {
+
     async function fetchData() {
       const result = await axios(
         'http://localhost:8000/assets',
       );
       const assets = JSON.parse(result.data)
-      setData(prev => [...prev, ...assets]);
+      console.log(assets.length)
+      setData(assets);
     }
-    fetchData();
+    fetchData()
+    setListening(true)
   }, [])
 
+  React.useEffect(() => {
+    if (!listening) {
+      const events = new EventSource('http://localhost:8000/stream');
+      events.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data);
+        console.log(parsedData[0])
+        setData((data)=> data.map( function(item) { if (item.id === parsedData[0].id) { return parsedData[0]} else {return item} }))
+      };
+
+      setListening(true);
+    }
+  }, [listening]);
 
   return (
     <Container style={{ marginTop: 100 }}>
-      <TableContainer columns={columns} data={[...data]} />
+      <TableContainer columns={columns} data={data} />
     </Container>
 
   );
