@@ -1,30 +1,22 @@
-// Main file for SSE. This server emits events at one every  second.
+
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const AssetsCollection = require('./assetsCollection.js')
+const { assets, didUpdate } = require('./assetsCollection.js')
 const app = express()
 app.use(express.json());
 
-const FREQUENCY = 1000;
-
-let cntr = 0
-var assetsCollection = new AssetsCollection();
-assetsCollection.createAssets();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Api to create and get all assets 
-app.get("/assets", (req, res) =>{
-    res.set({
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-        // enabling CORS
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-            "Origin, X-Requested-With, Content-Type, Accept",
-    });
-    assets = JSON.stringify(assetsCollection.getAssets());  
-    res.json(assets)
+app.get("/assets", (req, res) => {
+    const data = JSON.stringify(assets.getAssets());
+    res.send(data)
 })
 
 // Streaming SSE for sending an update every second for an asset
@@ -41,26 +33,20 @@ app.get("/stream", (req, res) => {
             "Origin, X-Requested-With, Content-Type, Accept",
     });
 
-    let eventInterval = setInterval(() => {
+    const didUpdateSubscription = didUpdate.subscribe((val) => {
+        console.log(val);
         res.write(`event: message\n`);
-        res.write(`data: ${JSON.stringify(assetsCollection.updateAsset(cntr))}\n\n`);
-        cntr++ 
-        if (cntr==179){
-            cntr=0
-        }
+        res.write(`data: ${JSON.stringify(val)}\n\n`);
         console.log(new Date().getTime() + "\n")
-    }, FREQUENCY);
+    })
 
     req.on("close", (err) => {
-        clearInterval(eventInterval);
+        didUpdateSubscription.unsubscribe();
         res.end();
     });
 })
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-const PORT = 8000;
-
-app.listen(PORT, () => console.log(`The server is listening on port ${PORT}`));
+app.listen(
+    process.env.PORT, 
+    () => console.log(`The server is listening on port ${process.env.PORT}`)
+);

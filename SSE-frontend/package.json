@@ -11,9 +11,12 @@
     "bootstrap": "^4.5.3",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-redux": "^7.2.1",
     "react-scripts": "3.4.3",
     "react-table": "^7.6.0",
     "reactstrap": "^8.6.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "rxjs": "^6.6.3",
     "rxjs-hooks": "^0.6.2",
     "yarn": "^1.22.10"

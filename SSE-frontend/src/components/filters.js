@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, CustomInput } from 'reactstrap';
 
 export const Filter = ({ column }) => {
@@ -16,10 +16,19 @@ export const DefaultColumnFilter = ({
     preFilteredRows: { length },
   },
 }) => {
+  const [text, setText] = useState('');
+
+  // INEFFICIENT, rerenders entire table.
+  useEffect(() => {
+    if(text !== filterValue)
+      setFilter(text);
+  }, [filterValue])
+
   return (
     <Input
-      value={filterValue || ''}
+      value={text || ''}
       onChange={(e) => {
+        setText(e.target.value);
         setFilter(e.target.value || undefined);
       }}
       placeholder={`search (${length}) ...`}

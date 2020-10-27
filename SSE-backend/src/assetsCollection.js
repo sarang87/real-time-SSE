@@ -1,7 +1,10 @@
 const Asset = require('./asset.js')
-const currencyCodes= require('./dataSource.js')
-const NUM_ASSETS = 180
-const MAX = 100;
+const Rx = require('rxjs/Rx');
+const { Observable } = require('rxjs/Observable');
+
+const currencyCodes = require('./dataSource.js')
+const NUM_ASSETS = process.env.NUMBER_OF_ASSETS;
+const MAX = process.env.MAX_BASE_RATE;
 
 
 // Class to hold a collection of assets. 
@@ -29,8 +32,6 @@ class AssetsCollection {
         const newRate = this.getNewRate(this.assetsList[idx].price)
         this.assetsList[idx].updateAsset(newRate, newTS)
         result.push(this.assetsList[idx].toJSON())
-        //return this.assetsList
-        console.log(result)
         return result
     }
 
@@ -53,30 +54,47 @@ class AssetsCollection {
 
 
     // helper method to get the current timestamp
-    getTimeStamp (){
+    getTimeStamp() {
         return new Date().getTime()
     };
 
     // helper function to get the new rate from the old rate which can increase or decrease
-    getNewRate(oldRate){
+    getNewRate(oldRate) {
         var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
         let newRate = oldRate + (plusOrMinus * oldRate * Math.random() * 0.1)
         return newRate
     }
 
     // helper method to get the currency code
-    getCurrencyCode(idx){
+    getCurrencyCode(idx) {
         return currencyCodes[idx]
     }
 
     // helper method to get the base exchange rate while setting up the assets
-    getBaseRate(){
+    getBaseRate() {
         return Math.random() * Math.floor(MAX)
     }
-
 }
 
-module.exports = AssetsCollection;
+const assets = new AssetsCollection();
+assets.createAssets();
+
+const interval = Rx.Observable.interval(2000);
+let index = 0;
+const didUpdate = new Observable((obs) => {
+    interval.subscribe(() => {
+        assets.updateAsset(index);
+        obs.next(assets.assetsList[index])
+        index++;
+        index = index % NUM_ASSETS;
+    })
+});
+
+
+module.exports = {
+    assets,
+    didUpdate
+}
 
 
 
